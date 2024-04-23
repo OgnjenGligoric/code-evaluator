@@ -1,6 +1,5 @@
-package org.example.codeevaluator;
+package org.example.codeevaluator.codeanalyzer;
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.*;
@@ -10,16 +9,36 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-public class MethodConditionalAnalyzer {
-    private final List<File> javaFiles;
-    private final JavaParser parser;
+public class MethodConditionalAnalyzer implements ICodeAnalyzer {
+    private List<File> javaFiles;
+    private JavaParser parser;
 
     public MethodConditionalAnalyzer(List<File> javaFiles) {
         this.javaFiles = javaFiles;
-        this.parser = new JavaParser(); // Initialize JavaParser once
+        this.parser = new JavaParser();
     }
 
-    public List<Map.Entry<String, Integer>> analyze() throws IOException {
+    public MethodConditionalAnalyzer() {
+        this.parser = new JavaParser();
+    }
+
+    public List<Map.Entry<String, Integer>> analyze(List<File> javaFiles) {
+        this.javaFiles = javaFiles;
+
+        Map<String, Integer> methodConditionsCount = new HashMap<>();
+
+        for (File file : javaFiles) {
+            CompilationUnit cu = parseFile(file.toPath());
+            if (cu != null) {
+                analyzeFile(cu, file, methodConditionsCount);
+            }
+        }
+
+        return sortAndTrimResults(methodConditionsCount);
+    }
+
+    public List<Map.Entry<String, Integer>> analyze() {
+
         Map<String, Integer> methodConditionsCount = new HashMap<>();
 
         for (File file : javaFiles) {
@@ -77,5 +96,21 @@ public class MethodConditionalAnalyzer {
         }, null);
 
         return count[0];
+    }
+
+    public List<File> getJavaFiles() {
+        return javaFiles;
+    }
+
+    public void setJavaFiles(List<File> javaFiles) {
+        this.javaFiles = javaFiles;
+    }
+
+    public JavaParser getParser() {
+        return parser;
+    }
+
+    public void setParser(JavaParser parser) {
+        this.parser = parser;
     }
 }
