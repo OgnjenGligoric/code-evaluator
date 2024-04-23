@@ -22,7 +22,7 @@ public class MethodConditionalAnalyzer implements ICodeAnalyzer {
         this.parser = new JavaParser();
     }
 
-    public List<Map.Entry<String, Integer>> analyze(List<File> javaFiles) {
+    public String analyze(List<File> javaFiles) {
         this.javaFiles = javaFiles;
 
         Map<String, Integer> methodConditionsCount = new HashMap<>();
@@ -34,21 +34,11 @@ public class MethodConditionalAnalyzer implements ICodeAnalyzer {
             }
         }
 
-        return sortAndTrimResults(methodConditionsCount);
+        return generateReport(methodConditionsCount);
     }
 
-    public List<Map.Entry<String, Integer>> analyze() {
-
-        Map<String, Integer> methodConditionsCount = new HashMap<>();
-
-        for (File file : javaFiles) {
-            CompilationUnit cu = parseFile(file.toPath());
-            if (cu != null) {
-                analyzeFile(cu, file, methodConditionsCount);
-            }
-        }
-
-        return sortAndTrimResults(methodConditionsCount);
+    public String analyze() {
+        return this.analyze(this.javaFiles);
     }
 
     private CompilationUnit parseFile(Path filePath) {
@@ -77,6 +67,19 @@ public class MethodConditionalAnalyzer implements ICodeAnalyzer {
         sortedMethods.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
         return sortedMethods.size() > 3 ? sortedMethods.subList(0, 3) : sortedMethods;
+    }
+
+    private String generateReport(Map<String, Integer> methodConditionsCount) {
+        StringBuilder report = new StringBuilder();
+        List<Map.Entry<String, Integer>> sortedMethods = sortAndTrimResults(methodConditionsCount);
+
+        report.append("Top 3 methods with the most conditional statements:\n");
+        for (int i = 0; i < sortedMethods.size() && i < 3; i++) {
+            Map.Entry<String, Integer> entry = sortedMethods.get(i);
+            report.append(String.format("%d. %s: %d conditional statements\n", i + 1, entry.getKey(), entry.getValue()));
+        }
+
+        return report.toString();
     }
 
     private int countConditionalStatements(MethodDeclaration method) {
