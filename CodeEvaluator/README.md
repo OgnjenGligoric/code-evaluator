@@ -34,6 +34,6 @@ This Spring Boot Java application evaluates basic aspects of code quality within
     *   Injects the `MethodConditionalAnalyzer` and `MethodStyleAnalyzer` instances into the `analyzeRepository()` method.
 4.  **Analysis Execution**:
 
-    *   Creates a list of `ICodeAnalyzer` instances (`codeAnalyzers`) and add the `methodConditionalAnalyzer` and `methodStyleAnalyzer` to it.
-    *   Iterates over each `ICodeAnalyzer` instance in the list and call the `analyze()` method, passing the list of Java files (`javaFiles`) as a parameter.
+    *   Creates a list of `ICodeAnalyzer` instances (`codeAnalyzers`) and adds the `methodConditionalAnalyzer` and `methodStyleAnalyzer` to it.
+    *   Iterates over each `ICodeAnalyzer` instance in the list and calls the `analyze()` method, passing the list of Java files (`javaFiles`) as a parameter.
     *   Each analyzer performs its specific analysis on the codebase and prints the result.
