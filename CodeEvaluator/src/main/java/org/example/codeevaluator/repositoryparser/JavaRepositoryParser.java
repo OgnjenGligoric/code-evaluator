@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Searches for Java source files in a given directory and its subdirectories.
  */
-public class JavaFileFinder implements IFileFinder {
+public class JavaRepositoryParser implements IRepositoryParser {
     private Path repositoryPath;
     private List<File> javaFiles;
 
@@ -18,13 +18,13 @@ public class JavaFileFinder implements IFileFinder {
      * Constructs a new JavaFileFinder.
      * @param repositoryPath the root directory path to search for Java files.
      */
-    public JavaFileFinder(String repositoryPath) {
+    public JavaRepositoryParser(String repositoryPath) {
         this.repositoryPath = Paths.get(repositoryPath);
         this.javaFiles = new ArrayList<>();
         verifyPath();
     }
 
-    public JavaFileFinder(){}
+    public JavaRepositoryParser(){}
 
     /**
      * Ensures the provided path exists.
