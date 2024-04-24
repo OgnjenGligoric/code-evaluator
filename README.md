@@ -7,6 +7,7 @@ Code Evaluator
 
 *   Set the environment variable `CODEBASE_REPOSITORY_PATH` in the run configuration to specify the path of the codebase repository you would like to evaluate. Example: `CODEBASE_REPOSITORY_PATH=D:\Example\Path`.
 *   The Java Spring Boot application was developed using Java 17.
+*   Dependency-wise, this application is using `com.github.javaparser version 3.24.0.`
 
 ### Overview
 
